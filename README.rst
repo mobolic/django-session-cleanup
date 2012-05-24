@@ -13,8 +13,7 @@ Django Session Cleanup provides a periodic task for `Celery <http://celeryprojec
 Usage
 -----
 
-1. Run ``python setup.py install`` to install,
-   or place ``session_cleanup`` on your Python path.
+1. Run ``pip install django-session-cleanup`` or place ``session_cleanup`` on your Python path.
 
 2. Add ``session_cleanup`` to your list of ``INSTALLED_APPS``.
 
