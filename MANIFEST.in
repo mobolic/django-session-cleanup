@@ -1,0 +1,2 @@
+include LICENSE README.rst requirements.txt
+recursive-include session_cleanup *
