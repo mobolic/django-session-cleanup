@@ -1,4 +1,4 @@
-*.log
-*.pot
-*.pyc
-local_settings.py
+*.py[c|o]
+.DS_Store
+*~
+*.egg-info
