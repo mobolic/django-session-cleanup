@@ -1,20 +1,17 @@
 from celery.task import task
-from django.conf import settings
-from django.contrib.sessions.models import Session
-from django.core.cache import cache
-from django.utils.importlib import import_module
-
-
-import datetime
+from django.core import management
 
 
 @task
 def cleanup():
-    engine = import_module(settings.SESSION_ENGINE)
-    SessionStore = engine.SessionStore
+    """
+    Cleanup expired sessions by using Django management command.
 
-    expired_sessions = Session.objects.filter(expire_date__lte=datetime.datetime.now())
+    Since the command's name changed in Django 1.5, we must try using
+    both 'clearsessions' and 'cleanup'.
 
-    for session in expired_sessions:
-        store = SessionStore(session.session_key)
-        store.delete()
+    """
+    try:
+        management.call_command("clearsessions", verbosity=0)
+    except management.base.CommandError:
+        management.call_command("cleanup", verbosity=0)
