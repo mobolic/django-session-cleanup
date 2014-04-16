@@ -1,7 +1,8 @@
-
 from django.conf import settings
 from django.core.cache import cache
 from django.test import TestCase
+from django.test.utils import override_settings
+from django.utils import timezone
 from django.utils.importlib import import_module
 from session_cleanup.tasks import cleanup
 
@@ -10,6 +11,7 @@ import datetime
 
 
 class CleanupTest(TestCase):
+    @override_settings(SESSION_ENGINE="django.contrib.sessions.backends.file")
     def test_session_cleanup(self):
         """
         Tests that sessions are deleted by the task
@@ -17,7 +19,7 @@ class CleanupTest(TestCase):
         engine = import_module(settings.SESSION_ENGINE)
         SessionStore = engine.SessionStore
 
-        now = datetime.datetime.now()
+        now = timezone.now()
         last_week = now - datetime.timedelta(days=7)
         stores = []
         unexpired_stores = []
