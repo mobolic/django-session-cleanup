@@ -11,7 +11,7 @@ with open('LICENSE') as f:
 
 setup(
     name='django-session-cleanup',
-    version='0.0.1',
+    version='0.0.2',
     description='A periodic task for removing expired Django sessions from the django_session table',
     long_description=readme,
     author='Elijah Rutschman',
