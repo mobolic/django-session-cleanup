@@ -1,16 +1,12 @@
+import datetime
+from importlib import import_module
+
 from django.conf import settings
-from django.core.cache import cache
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
-try:
-    from importlib import import_module
-except ImportError:
-    from django.utils.importlib import import_module
+
 from session_cleanup.tasks import cleanup
-
-
-import datetime
 
 
 class CleanupTest(TestCase):
