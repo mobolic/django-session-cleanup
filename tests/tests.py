@@ -11,6 +11,7 @@ from session_cleanup.tasks import cleanup
 
 class CleanupTest(TestCase):
     @override_settings(SESSION_ENGINE="django.contrib.sessions.backends.file")
+    @override_settings(SESSION_SERIALIZER="django.contrib.sessions.serializers.PickleSerializer")   # noqa: E501
     def test_session_cleanup(self):
         """
         Tests that sessions are deleted by the task
