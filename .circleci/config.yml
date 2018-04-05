@@ -44,7 +44,7 @@ jobs:
           name: run automated tests
           command: |
             . ~/venv/bin/activate
-            #TODO
+            python -Wall runtests.py
       - store_artifacts:
           path: test-reports
           destination: test-reports
