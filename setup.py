@@ -13,7 +13,7 @@ setup(
     name='django-session-cleanup',
     version='0.0.2',
     description=('A periodic task for removing expired Django sessions '
-                 'from the django_session table'),
+                 'with Celery.'),
     long_description=readme,
     author='Elijah Rutschman',
     author_email='elijahr+django-session-cleanup@gmail.com',
