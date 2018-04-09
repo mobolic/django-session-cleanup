@@ -1,20 +1,17 @@
+import datetime
+from importlib import import_module
+
 from django.conf import settings
-from django.core.cache import cache
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
-try:
-    from importlib import import_module
-except ImportError:
-    from django.utils.importlib import import_module
+
 from session_cleanup.tasks import cleanup
-
-
-import datetime
 
 
 class CleanupTest(TestCase):
     @override_settings(SESSION_ENGINE="django.contrib.sessions.backends.file")
+    @override_settings(SESSION_SERIALIZER="django.contrib.sessions.serializers.PickleSerializer")   # noqa: E501
     def test_session_cleanup(self):
         """
         Tests that sessions are deleted by the task
@@ -35,7 +32,8 @@ class CleanupTest(TestCase):
             stores.append(store)
 
         for store in stores:
-            self.assertEquals(store.exists(store.session_key), True, 'Session store could not be created')
+            self.assertEqual(store.exists(store.session_key), True,
+                             "Session store could not be created.")
 
         unexpired_stores = stores[:10]
         expired_stores = stores[10:]
@@ -48,7 +46,9 @@ class CleanupTest(TestCase):
         cleanup()
 
         for store in unexpired_stores:
-            self.assertEquals(store.exists(store.session_key), True, 'Unexpired store was deleted by cleanup')
+            self.assertEqual(store.exists(store.session_key), True,
+                             "Unexpired session was deleted by cleanup.")
 
         for store in expired_stores:
-            self.assertEquals(store.exists(store.session_key), False, 'Expired store was not deleted by cleanup')
+            self.assertEqual(store.exists(store.session_key), False,
+                             "Expired session was not deleted by cleanup.")

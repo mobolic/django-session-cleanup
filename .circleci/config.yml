@@ -1,0 +1,104 @@
+version: 2
+workflows:
+  version: 2
+  build:
+    jobs:
+      - test-py2.7-dj1.8
+      - test-py2.7-dj1.11
+      - test-py3.4-dj1.8
+      - test-py3.4-dj1.11
+      - test-py3.4-dj2.0
+      - test-py3.5-dj1.8
+      - test-py3.5-dj1.11
+      - test-py3.5-dj2.0
+      - test-py3.6-dj1.11
+      - test-py3.6-dj2.0
+jobs:
+  test-py2.7-dj1.8:  &test-python-django-template
+    docker:
+      - image: circleci/python:2.7
+    environment:
+      DJANGO_VERSION: 1.8
+    working-directory: ~/django-session-cleanup
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: |
+            mkdir -p ~/venv
+            if [ $(python -c "import platform; print(platform.python_version_tuple()[0])") == "2" ]; then
+              virtualenv ~/venv;
+            else
+              python -m venv ~/venv;
+            fi;
+            . ~/venv/bin/activate
+            pip install flake8
+            pip install django==${DJANGO_VERSION}
+            pip install -r requirements.txt
+      - run:
+          name: run linting
+          command: |
+            . ~/venv/bin/activate
+            flake8
+      - run:
+          name: run automated tests
+          command: |
+            . ~/venv/bin/activate
+            python -Wall runtests.py
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
+  test-py2.7-dj1.11:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:2.7
+    environment:
+      DJANGO_VERSION: 1.11
+  test-py3.4-dj1.8:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:3.4
+    environment:
+      DJANGO_VERSION: 1.8
+  test-py3.4-dj1.11:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:3.4
+    environment:
+      DJANGO_VERSION: 1.11
+  test-py3.4-dj2.0:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:3.4
+    environment:
+      DJANGO_VERSION: 2.0
+  test-py3.5-dj1.8:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:3.5
+    environment:
+      DJANGO_VERSION: 1.8
+  test-py3.5-dj1.11:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:3.5
+    environment:
+      DJANGO_VERSION: 1.11
+  test-py3.5-dj2.0:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:3.5
+    environment:
+      DJANGO_VERSION: 2.0
+  test-py3.6-dj1.11:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:3.6
+    environment:
+      DJANGO_VERSION: 1.11
+  test-py3.6-dj2.0:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:3.6
+    environment:
+      DJANGO_VERSION: 2.0
