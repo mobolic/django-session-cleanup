@@ -17,6 +17,8 @@ setup(
     long_description=readme,
     author='Elijah Rutschman',
     author_email='elijahr+django-session-cleanup@gmail.com',
+    maintainer='Martey Dodoo',
+    maintainer_email='martey+django-session-cleanup@mobolic.com',
     url='https://github.com/sandersnewmedia/django-session-cleanup',
     license=license,
     packages=find_packages(exclude=('tests',))
