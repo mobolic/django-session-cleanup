@@ -13,6 +13,8 @@ workflows:
       - test-py3.5-dj2.0
       - test-py3.6-dj1.11
       - test-py3.6-dj2.0
+      - test-py3.7-dj1.11
+      - test-py3.7-dj2.0
 jobs:
   test-py2.7-dj1.8:  &test-python-django-template
     docker:
@@ -100,5 +102,17 @@ jobs:
     <<: *test-python-django-template
     docker:
       - image: circleci/python:3.6
+    environment:
+      DJANGO_VERSION: 2.0
+  test-py3.7-dj1.11:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:3.7
+    environment:
+      DJANGO_VERSION: 1.11
+  test-py3.7-dj2.0:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:3.7
     environment:
       DJANGO_VERSION: 2.0
