@@ -34,7 +34,7 @@ jobs:
               python -m venv ~/venv;
             fi;
             . ~/venv/bin/activate
-            pip install flake8
+            pip install coverage flake8
             pip install django==${DJANGO_VERSION}
             pip install -r requirements.txt
       - run:
@@ -46,7 +46,7 @@ jobs:
           name: run automated tests
           command: |
             . ~/venv/bin/activate
-            python -Wall runtests.py
+            PYTHONWARNINGS=all coverage run --include="session_cleanup/*" runtests.py
       - store_artifacts:
           path: test-reports
           destination: test-reports
