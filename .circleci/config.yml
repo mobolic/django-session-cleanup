@@ -3,24 +3,22 @@ workflows:
   version: 2
   build:
     jobs:
-      - test-py2.7-dj1.8
       - test-py2.7-dj1.11
-      - test-py3.4-dj1.8
-      - test-py3.4-dj1.11
-      - test-py3.4-dj2.0
-      - test-py3.5-dj1.8
       - test-py3.5-dj1.11
       - test-py3.5-dj2.0
+      - test-py3.5-dj2.1
       - test-py3.6-dj1.11
       - test-py3.6-dj2.0
+      - test-py3.5-dj2.1
       - test-py3.7-dj1.11
       - test-py3.7-dj2.0
+      - test-py3.7-dj2.1
 jobs:
-  test-py2.7-dj1.8:  &test-python-django-template
+  test-py2.7-dj1.11: &test-python-django-template
     docker:
       - image: circleci/python:2.7
     environment:
-      DJANGO_VERSION: 1.8
+      DJANGO_VERSION: 1.11
     working-directory: ~/django-session-cleanup
     steps:
       - checkout
@@ -62,36 +60,6 @@ jobs:
       - store_artifacts:
           path: test-reports
           destination: test-reports
-  test-py2.7-dj1.11:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:2.7
-    environment:
-      DJANGO_VERSION: 1.11
-  test-py3.4-dj1.8:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.4
-    environment:
-      DJANGO_VERSION: 1.8
-  test-py3.4-dj1.11:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.4
-    environment:
-      DJANGO_VERSION: 1.11
-  test-py3.4-dj2.0:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.4
-    environment:
-      DJANGO_VERSION: 2.0
-  test-py3.5-dj1.8:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.5
-    environment:
-      DJANGO_VERSION: 1.8
   test-py3.5-dj1.11:
     <<: *test-python-django-template
     docker:
@@ -104,6 +72,12 @@ jobs:
       - image: circleci/python:3.5
     environment:
       DJANGO_VERSION: 2.0
+  test-py3.5-dj2.1:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:3.5
+    environment:
+      DJANGO_VERSION: 2.1
   test-py3.6-dj1.11:
     <<: *test-python-django-template
     docker:
@@ -116,6 +90,12 @@ jobs:
       - image: circleci/python:3.6
     environment:
       DJANGO_VERSION: 2.0
+  test-py3.6-dj2.1:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:3.6
+    environment:
+      DJANGO_VERSION: 2.1
   test-py3.7-dj1.11:
     <<: *test-python-django-template
     docker:
@@ -128,3 +108,9 @@ jobs:
       - image: circleci/python:3.7
     environment:
       DJANGO_VERSION: 2.0
+  test-py3.7-dj2.1:
+    <<: *test-python-django-template
+    docker:
+      - image: circleci/python:3.7
+    environment:
+      DJANGO_VERSION: 2.1
