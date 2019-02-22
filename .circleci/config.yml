@@ -13,6 +13,25 @@ workflows:
       - test-py3.7-dj1.11
       - test-py3.7-dj2.0
       - test-py3.7-dj2.1
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 8 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - test-py2.7-dj1.11
+      - test-py3.5-dj1.11
+      - test-py3.5-dj2.0
+      - test-py3.5-dj2.1
+      - test-py3.6-dj1.11
+      - test-py3.6-dj2.0
+      - test-py3.5-dj2.1
+      - test-py3.7-dj1.11
+      - test-py3.7-dj2.0
+      - test-py3.7-dj2.1
 jobs:
   test-py2.7-dj1.11: &test-python-django-template
     docker:
