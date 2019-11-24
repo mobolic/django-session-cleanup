@@ -8,7 +8,7 @@ with open('README.rst') as f:
 
 setup(
     name='django-session-cleanup',
-    version='1.0.0',
+    version='2.0.0',
     description=('A periodic task for removing expired Django sessions '
                  'with Celery.'),
     long_description=readme,
@@ -16,7 +16,7 @@ setup(
     author_email='elijahr+django-session-cleanup@gmail.com',
     maintainer='Martey Dodoo',
     maintainer_email='martey+django-session-cleanup@mobolic.com',
-    url='https://github.com/sandersnewmedia/django-session-cleanup',
+    url='https://github.com/mobolic/django-session-cleanup',
     classifiers=[
         'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',

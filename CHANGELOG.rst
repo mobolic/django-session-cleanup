@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Version 2.0.0 (unreleased)
+Version 2.0.0 (2019-11-24)
 ==========================
  - Add support for Django 2.1 and 2.2.
  - Remove explicit support for Python 3.4 and Django <1.11.
