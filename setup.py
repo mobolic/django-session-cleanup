@@ -16,7 +16,7 @@ setup(
     author_email='elijahr+django-session-cleanup@gmail.com',
     maintainer='Martey Dodoo',
     maintainer_email='martey+django-session-cleanup@mobolic.com',
-    url='https://github.com/sandersnewmedia/django-session-cleanup',
+    url='https://github.com/mobolic/django-session-cleanup',
     classifiers=[
         'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',
