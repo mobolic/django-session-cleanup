@@ -1,54 +1,14 @@
-version: 2
-workflows:
-  version: 2
-  build:
-    jobs:
-      - test-py2.7-dj1.11
-      - test-py3.5-dj1.11
-      - test-py3.5-dj2.0
-      - test-py3.5-dj2.1
-      - test-py3.5-dj2.2
-      - test-py3.6-dj1.11
-      - test-py3.6-dj2.0
-      - test-py3.5-dj2.1
-      - test-py3.7-dj2.2
-      - test-py3.7-dj1.11
-      - test-py3.7-dj2.0
-      - test-py3.7-dj2.1
-      - test-py3.7-dj2.2
-  nightly:
-    triggers:
-      - schedule:
-          cron: "0 8 * * *"
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - test-py2.7-dj1.11
-      - test-py3.5-dj1.11
-      - test-py3.5-dj2.0
-      - test-py3.5-dj2.1
-      - test-py3.5-dj2.2
-      - test-py3.6-dj1.11
-      - test-py3.6-dj2.0
-      - test-py3.5-dj2.1
-      - test-py3.7-dj2.2
-      - test-py3.7-dj1.11
-      - test-py3.7-dj2.0
-      - test-py3.7-dj2.1
-      - test-py3.7-dj2.2
-jobs:
-  test-py2.7-dj1.11: &test-python-django-template
-    docker:
-      - image: circleci/python:2.7
-    environment:
-      DJANGO_VERSION: 1.11
-    working-directory: ~/django-session-cleanup
+version: 2.1
+commands:
+  install-dependencies:
+    description: "Install Python dependencies into a virtualenv."
+    parameters:
+      django_version:
+        type: string
     steps:
       - checkout
       - run:
-          name: install dependencies
+          name: install Python virtualenv
           command: |
             mkdir -p ~/venv
             if [ $(python -c "import platform; print(platform.python_version_tuple()[0])") == "2" ]; then
@@ -56,104 +16,139 @@ jobs:
             else
               python -m venv ~/venv;
             fi;
-            . ~/venv/bin/activate
-            pip install coverage flake8
-            pip install django==${DJANGO_VERSION}
-            pip install -r requirements.txt
+      - run:
+          name: activate Python virtualenv
+          command: echo "source ~/venv/bin/activate" >> $BASH_ENV
+      - run: pip install coverage
+      - run: pip install django==<< parameters.django_version >>
+      - run: pip install -r ~/project/requirements.txt
+  download-codeclimate-reporter:
+    description: "Download CodeClimate test coverage reporter utility."
+    steps:
+     - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+     - run: chmod +x ./cc-test-reporter
+  run-automated-tests:
+    steps:
+      - run:
+          name: activate Python virtualenv
+          command: echo "source ~/venv/bin/activate" >> $BASH_ENV
+      - run: ./cc-test-reporter before-build
+      - run: PYTHONWARNINGS=all coverage run --include="session_cleanup/*" runtests.py
+      - run: coverage xml
+      - run: ./cc-test-reporter format-coverage -t coverage.py -o "coverage/codeclimate.$CIRCLE_NODE_INDEX.json"
+  upload-coverage-report-to-codeclimate:
+    steps:
+      - run: ./cc-test-reporter sum-coverage -o - -p $CIRCLE_NODE_TOTAL coverage/codeclimate.*.json | ./cc-test-reporter upload-coverage --debug -i -
+jobs:
+  lint:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - checkout
+      - run:
+          name: install and activate virtualenv
+          command: |
+            python -m venv ~/venv
+            echo "source ~/venv/bin/activate" >> $BASH_ENV
       - run:
           name: run linting
           command: |
-            . ~/venv/bin/activate
+            pip install flake8
             flake8
-      - run:
-          name: download CodeClimate test reporter utility
-          command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
-      - run:
-          name: run automated tests
-          command: |
-            . ~/venv/bin/activate
-            ./cc-test-reporter before-build
-            PYTHONWARNINGS=all coverage run --include="session_cleanup/*" runtests.py
-            coverage xml
-            ./cc-test-reporter format-coverage -t coverage.py -o "coverage/codeclimate.$CIRCLE_NODE_INDEX.json"
-      - deploy:
-          name: upload test coverage reports to CodeClimate
-          command: |
-            ./cc-test-reporter sum-coverage -o - -p $CIRCLE_NODE_TOTAL coverage/codeclimate.*.json | ./cc-test-reporter upload-coverage --debug -i -
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
-  test-py3.5-dj1.11:
-    <<: *test-python-django-template
+  test:
+    parameters:
+      django_version:
+        type: string
+      python_version:
+        type: string
+        default: latest
     docker:
-      - image: circleci/python:3.5
-    environment:
-      DJANGO_VERSION: 1.11
-  test-py3.5-dj2.0:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.5
-    environment:
-      DJANGO_VERSION: 2.0
-  test-py3.5-dj2.1:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.5
-    environment:
-      DJANGO_VERSION: 2.1
-  test-py3.5-dj2.2:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.5
-    environment:
-      DJANGO_VERSION: 2.2
-  test-py3.6-dj1.11:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.6
-    environment:
-      DJANGO_VERSION: 1.11
-  test-py3.6-dj2.0:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.6
-    environment:
-      DJANGO_VERSION: 2.0
-  test-py3.6-dj2.1:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.6
-    environment:
-      DJANGO_VERSION: 2.1
-  test-py3.6-dj2.2:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.6
-    environment:
-      DJANGO_VERSION: 2.2
-  test-py3.7-dj1.11:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.7
-    environment:
-      DJANGO_VERSION: 1.11
-  test-py3.7-dj2.0:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.7
-    environment:
-      DJANGO_VERSION: 2.0
-  test-py3.7-dj2.1:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.7
-    environment:
-      DJANGO_VERSION: 2.1
-  test-py3.7-dj2.2:
-    <<: *test-python-django-template
-    docker:
-      - image: circleci/python:3.7
-    environment:
-      DJANGO_VERSION: 2.2
+      - image: circleci/python:<< parameters.python_version >>
+    steps:
+      - install-dependencies:
+          django_version: << parameters.django_version >>
+      - download-codeclimate-reporter
+      - run-automated-tests
+      - upload-coverage-report-to-codeclimate
+workflows:
+  lint-and-test:
+    jobs:
+      - lint
+      - test:
+          name: "Python 2.7, Django 1.11"
+          django_version: "1.11.*"
+          python_version: "2.7"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.5, Django 1.11"
+          django_version: "1.11.*"
+          python_version: "3.5"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.5, Django 2.0"
+          django_version: "2.0.*"
+          python_version: "3.5"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.5, Django 2.1"
+          django_version: "2.1.*"
+          python_version: "3.5"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.5, Django 2.2"
+          django_version: "2.2.*"
+          python_version: "3.5"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.6, Django 1.11"
+          django_version: "1.11.*"
+          python_version: "3.6"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.6, Django 2.0"
+          django_version: "2.0.*"
+          python_version: "3.6"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.6, Django 2.1"
+          django_version: "2.1.*"
+          python_version: "3.6"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.6, Django 2.2"
+          django_version: "2.2.*"
+          python_version: "3.6"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.7, Django 1.11"
+          django_version: "1.11.*"
+          python_version: "3.7"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.7, Django 2.0"
+          django_version: "2.0.*"
+          python_version: "3.7"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.7, Django 2.1"
+          django_version: "2.1.*"
+          python_version: "3.7"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.7, Django 2.2"
+          django_version: "2.2.*"
+          python_version: "3.7"
+          requires:
+            - lint
