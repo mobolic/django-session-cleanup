@@ -4,6 +4,7 @@ Changelog
 
 Unreleased (2020-02-??)
 =======================
+ - Add support for Python 3.8.
  - Remove support for Python 2.7.
 
 Version 2.0.0 (2019-11-24)
