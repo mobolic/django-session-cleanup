@@ -2,8 +2,8 @@
 Changelog
 =========
 
-Unreleased (2020-02-??)
-=======================
+Version 3.0.0 (2020-02-03)
+==========================
  - Add support for Python 3.8 and Django 3.0.
  - Remove support for Python 2.7.
 
