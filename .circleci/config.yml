@@ -75,12 +75,6 @@ workflows:
     jobs:
       - lint
       - test:
-          name: "Python 2.7, Django 1.11"
-          django_version: "1.11.*"
-          python_version: "2.7"
-          requires:
-            - lint
-      - test:
           name: "Python 3.5, Django 1.11"
           django_version: "1.11.*"
           python_version: "3.5"
