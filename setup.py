@@ -8,7 +8,7 @@ with open('README.rst') as f:
 
 setup(
     name='django-session-cleanup',
-    version='2.0.0',
+    version='3.0.0',
     description=('A periodic task for removing expired Django sessions '
                  'with Celery.'),
     long_description=readme,
@@ -24,7 +24,6 @@ setup(
         'Framework :: Django :: 2.2',
         'Framework :: Django :: 3.0',
         'License :: OSI Approved :: BSD License',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
