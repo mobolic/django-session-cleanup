@@ -123,6 +123,12 @@ workflows:
           requires:
             - lint
       - test:
+          name: "Python 3.6, Django 3.0"
+          django_version: "3.0.*"
+          python_version: "3.6"
+          requires:
+            - lint
+      - test:
           name: "Python 3.7, Django 1.11"
           django_version: "1.11.*"
           python_version: "3.7"
@@ -147,8 +153,20 @@ workflows:
           requires:
             - lint
       - test:
+          name: "Python 3.7, Django 3.0"
+          django_version: "3.0.*"
+          python_version: "3.7"
+          requires:
+            - lint
+      - test:
           name: "Python 3.8, Django 2.2"
           django_version: "2.2.*"
+          python_version: "3.8"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.8, Django 3.0"
+          django_version: "3.0.*"
           python_version: "3.8"
           requires:
             - lint
