@@ -42,7 +42,7 @@ commands:
 jobs:
   lint:
     docker:
-      - image: circleci/python:3.8
+      - image: circleci/python:3.9
     steps:
       - checkout
       - run:
@@ -75,45 +75,9 @@ workflows:
     jobs:
       - lint
       - test:
-          name: "Python 3.5, Django 1.11"
-          django_version: "1.11.*"
-          python_version: "3.5"
-          requires:
-            - lint
-      - test:
-          name: "Python 3.5, Django 2.0"
-          django_version: "2.0.*"
-          python_version: "3.5"
-          requires:
-            - lint
-      - test:
-          name: "Python 3.5, Django 2.1"
-          django_version: "2.1.*"
-          python_version: "3.5"
-          requires:
-            - lint
-      - test:
           name: "Python 3.5, Django 2.2"
           django_version: "2.2.*"
           python_version: "3.5"
-          requires:
-            - lint
-      - test:
-          name: "Python 3.6, Django 1.11"
-          django_version: "1.11.*"
-          python_version: "3.6"
-          requires:
-            - lint
-      - test:
-          name: "Python 3.6, Django 2.0"
-          django_version: "2.0.*"
-          python_version: "3.6"
-          requires:
-            - lint
-      - test:
-          name: "Python 3.6, Django 2.1"
-          django_version: "2.1.*"
-          python_version: "3.6"
           requires:
             - lint
       - test:
@@ -123,38 +87,8 @@ workflows:
           requires:
             - lint
       - test:
-          name: "Python 3.6, Django 3.0"
-          django_version: "3.0.*"
-          python_version: "3.6"
-          requires:
-            - lint
-      - test:
-          name: "Python 3.7, Django 1.11"
-          django_version: "1.11.*"
-          python_version: "3.7"
-          requires:
-            - lint
-      - test:
-          name: "Python 3.7, Django 2.0"
-          django_version: "2.0.*"
-          python_version: "3.7"
-          requires:
-            - lint
-      - test:
-          name: "Python 3.7, Django 2.1"
-          django_version: "2.1.*"
-          python_version: "3.7"
-          requires:
-            - lint
-      - test:
           name: "Python 3.7, Django 2.2"
           django_version: "2.2.*"
-          python_version: "3.7"
-          requires:
-            - lint
-      - test:
-          name: "Python 3.7, Django 3.0"
-          django_version: "3.0.*"
           python_version: "3.7"
           requires:
             - lint
@@ -165,8 +99,62 @@ workflows:
           requires:
             - lint
       - test:
+          name: "Python 3.9, Django 2.2"
+          django_version: "2.2.*"
+          python_version: "3.9"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.6, Django 3.0"
+          django_version: "3.0.*"
+          python_version: "3.6"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.7, Django 3.0"
+          django_version: "3.0.*"
+          python_version: "3.7"
+          requires:
+            - lint
+      - test:
           name: "Python 3.8, Django 3.0"
           django_version: "3.0.*"
           python_version: "3.8"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.9, Django 3.0"
+          django_version: "3.0.*"
+          python_version: "3.9"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.9, Django 3.0"
+          django_version: "3.0.*"
+          python_version: "3.9"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.6, Django 3.1"
+          django_version: "3.1.*"
+          python_version: "3.6"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.7, Django 3.1"
+          django_version: "3.1.*"
+          python_version: "3.7"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.8, Django 3.1"
+          django_version: "3.1.*"
+          python_version: "3.8"
+          requires:
+            - lint
+      - test:
+          name: "Python 3.9, Django 3.1"
+          django_version: "3.1.*"
+          python_version: "3.9"
           requires:
             - lint
