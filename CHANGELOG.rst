@@ -2,6 +2,13 @@
 Changelog
 =========
 
+Version 4.0.0 (2021-01-20)
+==========================
+ - Add support for Celery 5.
+ - Change minimum package requirements to be more accurate.
+ - Add support for Python 3.9 and Django 3.1.
+ - Remove support for Django 1.11, 2.0, and 2.1.
+
 Version 3.0.0 (2020-02-03)
 ==========================
  - Add support for Python 3.8 and Django 3.0.
